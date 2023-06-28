@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "libreoffice python template"
+version = "0.1.0"
+description = "Template for creating python projects for LibreOffice"
+authors = [":Barry-Thomas-Paul: Moss <vibrationoflife@protonmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+ooo-dev-tools = ">=0.11.10"
+
+
+[tool.poetry.group.dev.dependencies]
+types-scriptforge = ">=2.0.1"
+black = "^23.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

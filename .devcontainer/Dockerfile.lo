@@ -1,0 +1,31 @@
+FROM lscr.io/linuxserver/libreoffice:7.5.3
+
+# ARG CODE_PORT=2002
+
+RUN apk add htop
+
+COPY ./.devcontainer/res /tmp/res
+
+RUN mkdir -p /usr/lib/libreoffice/share/extensions \
+    && /tmp/res/scripts/ext.sh \
+    && mkdir -p "$HOME/.config/libreoffice/4/user/" \
+    && mv /tmp/res/defaults/registrymodifications.xcu "$HOME/.config/libreoffice/4/user/registrymodifications.xcu"
+
+# install requirements.txt using pip
+# don't need pip so add and remove it to keep image size smaller
+RUN apk add py-pip \
+    && /usr/bin/pip install --no-cache-dir -r /tmp/res/req/requirements.txt \
+    && apk del py-pip
+
+
+# RUN sed -i "s/libreoffice/soffice --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /defaults/autostart \
+#     && sed -i "s/--base/--base --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /usr/lib/libreoffice/share/xdg/base.desktop \
+#     && sed -i "s/--calc/--calc --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /usr/lib/libreoffice/share/xdg/calc.desktop \
+#     && sed -i "s/--draw/--draw --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /usr/lib/libreoffice/share/xdg/draw.desktop \
+#     && sed -i "s/--impress/--impress --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /usr/lib/libreoffice/share/xdg/impress.desktop \
+#     && sed -i "s/--math/--math --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /usr/lib/libreoffice/share/xdg/math.desktop \
+#     && sed -i "s/--writer/--writer --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /usr/lib/libreoffice/share/xdg/writer.desktop
+
+WORKDIR /
+
+# EXPOSE $CODE_PORT

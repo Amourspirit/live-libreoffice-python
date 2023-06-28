@@ -1,16 +1,26 @@
 FROM python:3.11-alpine3.18
 ARG RUN_ENV="development"
 
-RUN apk add git
+USER root
 
-ENV RUN_ENV=${RUN_ENV} \
+RUN apk update \
+    && apk add --no-cache git \
+    openssh
+
+ARG HOME=/root
+# https://unix.stackexchange.com/questions/176027/ash-profile-configuration-file
+COPY ./.devcontainer/rc.txt $HOME/.rc
+
+ENV HOME=$HOME \
+    RUN_ENV=${RUN_ENV} \
     PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONHASHSEED=random \
     PIP_NO_CACHE_DIR=off \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_DEFAULT_TIMEOUT=100 \
-    POETRY_VERSION=1.5.1
+    POETRY_VERSION=1.5.1 \
+    ENV=/$HOME/.rc
 
 # https://stackoverflow.com/questions/53835198/integrating-python-poetry-with-docker
 # System deps:
@@ -23,20 +33,21 @@ COPY ./pyproject.toml ./poetry.lock ./poetry.toml ./
 # poetry config virtualenvs.create false
 RUN poetry install $(test "$RUN_ENV" == production && echo "--no-dev") --no-interaction --no-ansi --no-root
 
-USER root
-ENV HOME /root
-
 WORKDIR /workspace/libreoffice_python
 
+
+# When in Github codespaces `CODESPACES=true` is set, so we can use that to add git shortcuts.
 RUN if [ x"$GIT_AUTHOR_NAME" != "x" ]; then git config --global user.name "$GIT_AUTHOR_NAME" || true; fi \
-    && if [ x"$GIT_AUTHOR_EMAIL" != "x" ]; then git config --global user.email $GIT_AUTHOR_EMAIL || true; fi
-
-
-# WORKDIR $HOME
+    && if [ x"$GIT_AUTHOR_EMAIL" != "x" ]; then git config --global user.email $GIT_AUTHOR_EMAIL || true; fi \
+    && if [ "$CODESPACES" == "true" ]; then git config --global alias.co checkout \
+    && git config --global alias.br branch \
+    && git config --global alias.ci commit \
+    && git config --global alias.s "status -s" \
+    && git config --global alias.type "cat-file -t" \
+    && git config --global alias.dump "cat-file -p"; fi
 
 ENV VIRTUAL_ENV=/workspace/libreoffice_python/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-
 
 # COPY ./.devcontainer/custom_bash.txt ./.bashrc_custom
 

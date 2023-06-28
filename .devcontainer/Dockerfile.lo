@@ -3,14 +3,18 @@ FROM lscr.io/linuxserver/libreoffice:7.5.3
 # ARG CODE_PORT=2002
 ENV HOME=/config
 
-RUN apk add htop
+RUN apk update \
+    && apk add --no-cache htop
+
 
 COPY ./.devcontainer/res /tmp/res
 
 RUN mkdir -p /usr/lib/libreoffice/share/extensions \
     && /tmp/res/scripts/ext.sh \
     && mkdir -p "$HOME/.config/libreoffice/4/user/" \
-    && mv /tmp/res/defaults/registrymodifications.xcu "$HOME/.config/libreoffice/4/user/registrymodifications.xcu"
+    && mv /tmp/res/defaults/registrymodifications.xcu "$HOME/.config/libreoffice/4/user/registrymodifications.xcu" \
+    && mv /tmp/res/scripts/unlock "$HOME/unlock" \
+    && chmod +x "$HOME/unlock"
 
 # install requirements.txt using pip
 # don't need pip so add and remove it to keep image size smaller

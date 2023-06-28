@@ -3,7 +3,9 @@ FROM lscr.io/linuxserver/libreoffice:7.5.3
 # ARG CODE_PORT=2002
 ENV HOME=/config
 
-RUN apk add htop
+RUN apk update \
+    && apk add --no-cache htop
+
 
 COPY ./.devcontainer/res /tmp/res
 

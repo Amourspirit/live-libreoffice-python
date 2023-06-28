@@ -3,7 +3,9 @@ ARG RUN_ENV="development"
 
 USER root
 
-RUN apk add git
+RUN apk update \
+    && apk add --no-cache git \
+    openssh
 
 ARG HOME=/root
 # https://unix.stackexchange.com/questions/176027/ash-profile-configuration-file

@@ -1,6 +1,7 @@
 FROM lscr.io/linuxserver/libreoffice:7.5.3
 
 # ARG CODE_PORT=2002
+ENV HOME=/config
 
 RUN apk add htop
 

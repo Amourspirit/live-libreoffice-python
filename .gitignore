@@ -229,5 +229,4 @@ pip-selfcheck.json
 ### dotenv ###
 user.env
 
-!.devcontainer/*
 !.devcontainer/res/scripts

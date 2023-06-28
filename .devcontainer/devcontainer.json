@@ -10,7 +10,17 @@
 	// "features": {},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	"forwardPorts": [3002, 3003],
+	"portsAttributes": {
+		"3002": {
+			"visibility": "private",
+			"label": "LibreOffice Http Server 3002"
+		},
+		"3003": {
+			"visibility": "private",
+			"label": "LibreOffice Https Server 3003"
+		}
+	},
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "uname -a",

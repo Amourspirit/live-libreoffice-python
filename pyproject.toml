@@ -18,3 +18,21 @@ black = "^23.3.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.ruff]
+extended-select=["ANN", "C4", "N", "SIM", "TCH"]
+ignore=[]
+show-fixes=true
+target="py37"
+
+[tool.pylint.'MESSAGES CONTROL']
+max-line-length = 120
+disable = """
+    no-name-in-module,
+    no-self-argument
+"""
+
+[tool.pyright]
+include = ["src"]
+reportMissingModuleSource = false

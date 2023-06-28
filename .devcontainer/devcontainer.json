@@ -31,6 +31,9 @@
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	"remoteUser": "root",
+	"mounts": [
+		"source=vscode-extensions,target=/root/.vscode-server/extensions,type=volume"
+	],
 	"customizations": {
 		"vscode": {
 			"extensions": [

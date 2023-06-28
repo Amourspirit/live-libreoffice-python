@@ -4,7 +4,6 @@
 
 ### dotenv ###
 .env
-user.env
 
 ### Linux ###
 *~
@@ -227,3 +226,8 @@ pip-selfcheck.json
 
 # Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
 
+### dotenv ###
+user.env
+
+!.devcontainer/*
+!.devcontainer/res/scripts

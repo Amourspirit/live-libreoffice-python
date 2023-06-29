@@ -1,4 +1,5 @@
-FROM python:3.11-alpine3.18
+ARG PY_VER=3.11
+FROM python:$PY_VER-alpine3.18
 ARG RUN_ENV="development"
 
 USER root
@@ -9,7 +10,7 @@ RUN apk update \
 
 ARG HOME=/root
 # https://unix.stackexchange.com/questions/176027/ash-profile-configuration-file
-COPY ./.devcontainer/rc.txt $HOME/.rc
+COPY ./.devcontainer/rc.txt $HOME/.ashrc
 
 ENV HOME=$HOME \
     RUN_ENV=${RUN_ENV} \
@@ -20,7 +21,7 @@ ENV HOME=$HOME \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_DEFAULT_TIMEOUT=100 \
     POETRY_VERSION=1.5.1 \
-    ENV=/$HOME/.rc
+    ENV=$HOME/.ashrc
 
 # https://stackoverflow.com/questions/53835198/integrating-python-poetry-with-docker
 # System deps:
@@ -49,12 +50,18 @@ RUN if [ x"$GIT_AUTHOR_NAME" != "x" ]; then git config --global user.name "$GIT_
 ENV VIRTUAL_ENV=/workspace/libreoffice_python/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
-# COPY ./.devcontainer/custom_bash.txt ./.bashrc_custom
+# it is not possible to set the build environment vars.
+# To get a var to persit in this manor an entry point script would need to be implemented.
+# The solution is to create the environment and use it all in the same command.
+# See: https://forums.docker.com/t/how-do-i-send-runs-output-to-env-in-dockerfile/16106/2
+RUN MY_PY_VER=$(python -c "import sys; major, minor = sys.version_info[:2]; print(f'{major}.{minor}');" ) \
+    && echo $MY_PY_VER \
+    && echo "/workspace/libreoffice_python" >> "/workspace/libreoffice_python/.venv/lib/python$MY_PY_VER/site-packages/ooo_dev_tools.pth"
 
-ARG WD=/workspace/libreoffice_python/.venv/lib/python$PY_VER/site-packages
+# UNO version
+# RUN ln -s /usr/lib/python3/dist-packages/uno.py uno.py \
+#     && ln -s /usr/lib/python3/dist-packages/unohelper.py unohelper.py \
+#     && echo "/workspace/libreoffice_python" >> ooo_dev_tools.pth
 
-WORKDIR ${WD}
-
-RUN ln -s /usr/lib/python3/dist-packages/uno.py uno.py \
-    && ln -s /usr/lib/python3/dist-packages/unohelper.py unohelper.py \
-    && echo "/workspace/libreoffice_python" >> ooo_dev_tools.pth
+# RUN echo "/workspace/libreoffice_python" >> ooo_dev_tools.pth
+WORKDIR /workspace/libreoffice_python

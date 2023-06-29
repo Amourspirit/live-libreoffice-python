@@ -1,4 +1,4 @@
-FROM lscr.io/linuxserver/libreoffice:7.5.3
+FROM linuxserver/libreoffice:7.5.3
 
 # ARG CODE_PORT=2002
 ENV HOME=/config
@@ -13,8 +13,11 @@ RUN mkdir -p /usr/lib/libreoffice/share/extensions \
     && /tmp/res/scripts/ext.sh \
     && mkdir -p "$HOME/.config/libreoffice/4/user/" \
     && mv /tmp/res/defaults/registrymodifications.xcu "$HOME/.config/libreoffice/4/user/registrymodifications.xcu" \
-    && mv /tmp/res/scripts/unlock "$HOME/unlock" \
-    && chmod +x "$HOME/unlock"
+    && mkdir -p "$HOME/.bin" \
+    && mv /tmp/res/scripts/unlock "$HOME/.bin/unlock" \
+    && chmod +x "$HOME/.bin/unlock"
+
+ENV PATH="$HOME/.bin:$PATH"
 
 # install requirements.txt using pip
 # don't need pip so add and remove it to keep image size smaller

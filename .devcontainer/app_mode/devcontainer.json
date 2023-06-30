@@ -1,11 +1,11 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
 {
-	"name": "LibreOffice Python",
+	"name": "LibreOffice Python App",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"dockerComposeFile": "docker-compose.yml",
-	"service": "app",
-	"workspaceFolder": "/workspace/libreoffice_python",
+	"service": "libreoffice_app",
+	"workspaceFolder": "/workspace/libreoffice_python_app",
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 
@@ -22,10 +22,6 @@
 		}
 	},
 	
-
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "uname -a",
-	// "postCreateCommand": "poetry install && . ./.venv/bin/activate && oooenv cmd-link -a",
 
 	// Configure tool-specific properties.
 	// "customizations": {},
@@ -45,7 +41,8 @@
 				"littlefoxteam.vscode-python-test-adapter",
 				"ms-vscode.test-adapter-converter",
 				"hbenl.vscode-test-explorer",
-				"Phu1237.vs-browser"
+				"Phu1237.vs-browser",
+				"streetsidesoftware.code-spell-checker"
 			]
 		},
 		"settings": {
@@ -53,6 +50,8 @@
 		},
 	},
 	// Did not work when placed in brackets. Only as string. Brackets need to call /usr/bin/sh -c
-	"initializeCommand": "echo $PWD && if which git >/dev/null && [ x\"${HOME}\" != \"x\" ] && [ -n \"$(git config --global user.name)\" ] && [ -n \"$(git config --global user.email)\" ]; then echo \"GIT_AUTHOR_NAME=$(git config --global user.name)\nGIT_AUTHOR_EMAIL=$(git config --global user.email)\" > .devcontainer/.env || true; else echo \"GIT_AUTHOR_NAME=\"\"\nGIT_AUTHOR_EMAIL=\"\"\" > .devcontainer/.env || true; fi && echo \"PUID=$(id -u $USER)\nPGID=$(id -g $USER)\" > .devcontainer/user.env"
-
+	"initializeCommand": "echo $PWD && if which git >/dev/null && [ x\"${HOME}\" != \"x\" ] && [ -n \"$(git config --global user.name)\" ] && [ -n \"$(git config --global user.email)\" ]; then echo \"GIT_AUTHOR_NAME=$(git config --global user.name)\nGIT_AUTHOR_EMAIL=$(git config --global user.email)\" > .devcontainer/app_mode/.env || true; else echo \"GIT_AUTHOR_NAME=\"\"\nGIT_AUTHOR_EMAIL=\"\"\" > .devcontainer/app_mode/.env || true; fi && echo \"PUID=$(id -u $USER)\nPGID=$(id -g $USER)\" > .devcontainer/app_mode/user.env",
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "uname -a",
+	"postCreateCommand": ["nohup", "bash", "/defaults/autostart"]
 }

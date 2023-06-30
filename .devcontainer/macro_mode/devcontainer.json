@@ -1,0 +1,58 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+	"name": "LibreOffice Python Macros",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/workspace/libreoffice_python",
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [3002, 3003],
+	"portsAttributes": {
+		"3002": {
+			"visibility": "private",
+			"label": "LibreOffice Http Server 3002"
+		},
+		"3003": {
+			"visibility": "private",
+			"label": "LibreOffice Https Server 3003"
+		}
+	},
+	
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "uname -a",
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	"remoteUser": "root",
+	"mounts": [
+		"source=vscode-extensions,target=/root/.vscode-server/extensions,type=volume"
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"njpwerner.autodocstring",
+				"ms-python.black-formatter",
+				"ms-python.vscode-pylance",
+				"littlefoxteam.vscode-python-test-adapter",
+				"ms-vscode.test-adapter-converter",
+				"hbenl.vscode-test-explorer",
+				"Phu1237.vs-browser",
+				"streetsidesoftware.code-spell-checker"
+			]
+		},
+		"settings": {
+			"terminal.integrated.shell.linux": "/bin/ash"
+		},
+	},
+	// Did not work when placed in brackets. Only as string. Brackets need to call /usr/bin/sh -c
+	"initializeCommand": "echo $PWD && if which git >/dev/null && [ x\"${HOME}\" != \"x\" ] && [ -n \"$(git config --global user.name)\" ] && [ -n \"$(git config --global user.email)\" ]; then echo \"GIT_AUTHOR_NAME=$(git config --global user.name)\nGIT_AUTHOR_EMAIL=$(git config --global user.email)\" > .devcontainer/macro_mode/.env || true; else echo \"GIT_AUTHOR_NAME=\"\"\nGIT_AUTHOR_EMAIL=\"\"\" > .devcontainer/macro_mode/.env || true; fi && echo \"PUID=$(id -u $USER)\nPGID=$(id -g $USER)\" > .devcontainer/macro_mode/user.env"
+
+}

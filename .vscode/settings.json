@@ -7,7 +7,7 @@
         "editor.formatOnSaveMode": "file",
         "editor.formatOnSave": true
     },
-    "python.defaultInterpreterPath": "${workspaceRoot}/.venv/bin/python",
+    "python.defaultInterpreterPath": "${workspaceRoot}/.venv/bin/python3",
     "autoDocstring.docstringFormat": "google",
     "workbench.colorCustomizations": {
         "[Monokai]": {
@@ -310,6 +310,5 @@
         "zoombar",
         "zorder"
     ],
-    "python.analysis.typeCheckingMode": "basic",
-    "vs-browser.url": "http://localhost:3002"
+    "python.analysis.typeCheckingMode": "basic"
 }

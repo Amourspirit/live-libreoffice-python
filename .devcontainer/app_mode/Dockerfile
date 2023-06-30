@@ -3,8 +3,14 @@ FROM linuxserver/libreoffice:7.5.3
 ARG CODE_PORT=2002
 ARG HOME=/root
 
+# Had Error: Compilation error in psutil/_psutil_linux
+# See Github: https://github.com/giampaolo/psutil/issues/664
 RUN apk update \
     && apk add --no-cache htop \
+    linux-headers \
+    libc-dev \
+    gcc \
+    python3-dev \
     git \
     openssh \
     py-pip
@@ -19,8 +25,9 @@ RUN sed -i "s/libreoffice/soffice --accept=\"socket,host=localhost,port=${CODE_P
 
 
 COPY ./.devcontainer/res /tmp/res
-
+COPY ./.devcontainer/app_mode/local_res /tmp/local_res
 COPY ./.devcontainer/rc.txt $HOME/.ashrc
+
 
 ENV HOME=$HOME \
     RUN_ENV=${RUN_ENV} \
@@ -59,7 +66,8 @@ ENV PATH="$HOME/.local/bin:/usr/lib/libreoffice/program::$PATH" \
 # install requirements.txt using pip
 # don't need pip so add and remove it to keep image size smaller
 RUN  /usr/bin/pip install "poetry==$POETRY_VERSION" \
-    && /usr/bin/pip install --no-cache-dir -r /tmp/res/req/requirements.txt
+    && if [ -f "/tmp/local_res/req/requirements.txt" ]; then \
+    /usr/bin/pip install --no-cache-dir -r /tmp/local_res/req/requirements.txt; fi
 
 WORKDIR /workspace/libreoffice_python_app
 COPY ./pyproject.toml ./poetry.lock ./poetry.toml ./

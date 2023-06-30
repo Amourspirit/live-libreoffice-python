@@ -49,15 +49,15 @@ services:
         source: lo_config
         target: /config
       - type: bind
-        source: ../../src/macros
+        source: ../../macro
         target: /config/.config/libreoffice/4/user/Scripts/python
       - type: bind
-        source: ../../code_docs
-        target: /config/Code Documents
+        source: ../../Documents
+        target: /config/Documents
     
     ports:
-      - 3002:3000
-      - 3003:3001
+      - 3004:3000
+      - 3005:3001
     restart: unless-stopped
 
 volumes:

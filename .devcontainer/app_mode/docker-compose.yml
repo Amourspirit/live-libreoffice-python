@@ -26,11 +26,11 @@ services:
         source: ../../
         target: /workspace/libreoffice_python_app
       - type: bind
-        source: ../../code_docs
-        target: /config/Code Documents
+        source: ../../Documents
+        target: /root/Documents
       - type: bind
-        source: ../../src/macros
-        target: /config/.config/libreoffice/4/user/Scripts/python
+        source: ../../macro
+        target: /root/.config/libreoffice/4/user/Scripts/python
       - type: volume
         source: app_lo_config
         target: /config

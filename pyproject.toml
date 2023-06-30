@@ -14,6 +14,8 @@ ooo-dev-tools = ">=0.11.10"
 [tool.poetry.group.dev.dependencies]
 types-scriptforge = ">=2.0.1"
 black = "^23.3.0"
+lo-dev-search = ">=2.0.2"
+oooenv = ">=0.2.2"
 
 [build-system]
 requires = ["poetry-core"]

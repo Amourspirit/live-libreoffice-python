@@ -23,9 +23,9 @@ RUN sed -i "s/libreoffice/soffice --accept=\"socket,host=localhost,port=${CODE_P
     && sed -i "s/--math/--math --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /usr/lib/libreoffice/share/xdg/math.desktop \
     && sed -i "s/--writer/--writer --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /usr/lib/libreoffice/share/xdg/writer.desktop
 
-
-COPY ./.devcontainer/res /tmp/res
-COPY ./.devcontainer/app_mode/local_res /tmp/local_res
+# Codespaces mounts its own /tmp directory, so we need to create a new one
+COPY ./.devcontainer/res $HOME/.tmp/res
+COPY ./.devcontainer/app_mode/local_res $HOME/.tmp/local_res
 COPY ./.devcontainer/rc.txt $HOME/.ashrc
 
 
@@ -60,8 +60,8 @@ ENV PATH="/usr/lib/libreoffice/program:$PATH" \
 # install requirements.txt using pip
 # don't need pip so add and remove it to keep image size smaller
 RUN  /usr/bin/pip install "poetry==$POETRY_VERSION" \
-    && if [ -f "/tmp/local_res/req/requirements.txt" ]; then \
-    /usr/bin/pip install --no-cache-dir -r /tmp/local_res/req/requirements.txt; fi
+    && if [ -f "$HOME/.tmp/local_res/req/requirements.txt" ]; then \
+    /usr/bin/pip install --no-cache-dir -r "$HOME/.tmp/local_res/req/requirements.txt"; fi
 
 WORKDIR /workspace/libreoffice_python_app
 COPY ./pyproject.toml ./poetry.lock ./poetry.toml ./
@@ -80,11 +80,11 @@ COPY ./.devcontainer/app_mode/root/defaults /defaults
 COPY ./.devcontainer/app_mode/startup.sh /usr/local/bin/startup.sh
 
 # Moved extension install to to here 
-RUN mv /tmp/res/scripts/unlock "/usr/local/bin/unlock" \
+RUN mv "$HOME/.tmp/res/scripts/unlock" "/usr/local/bin/unlock" \
     && chmod +x "/usr/local/bin/unlock" \
     && chmod +x /defaults/autostart \
     && mkdir -p "$HOME/.config/libreoffice/4/user/" \
-    && mv /tmp/res/defaults/registrymodifications.xcu "$HOME/.config/libreoffice/4/user/registrymodifications.xcu" \
+    && mv "$HOME/.tmp/res/defaults/registrymodifications.xcu" "$HOME/.config/libreoffice/4/user/registrymodifications.xcu" \
     && mkdir -p /usr/lib/libreoffice/share/extensions \
     # && /tmp/res/scripts/ext.sh \
     && chmod +x /usr/local/bin/startup.sh

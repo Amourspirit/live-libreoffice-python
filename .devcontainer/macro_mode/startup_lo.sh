@@ -7,5 +7,5 @@ if [ -f "$FILE_LOCK" ]; then
     rm "$FILE_LOCK"
 fi
 # run soffice after ext are installed
-soffice --terminate_after_init &
+# soffice --headless --terminate_after_init &
 echo "Startup Success!!!"

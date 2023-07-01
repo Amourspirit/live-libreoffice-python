@@ -40,13 +40,7 @@ ENV HOME=$HOME \
     POETRY_VERSION=1.5.1 \
     ENV=$HOME/.ashrc
 
-RUN mkdir -p /usr/lib/libreoffice/share/extensions \
-    && /tmp/res/scripts/ext.sh \
-    && mkdir -p "$HOME/.config/libreoffice/4/user/" \
-    && mv /tmp/res/defaults/registrymodifications.xcu "$HOME/.config/libreoffice/4/user/registrymodifications.xcu" \
-    && mkdir -p "$HOME/.local/bin" \
-    && mv /tmp/res/scripts/unlock "$HOME/.local/bin/unlock" \
-    && chmod +x "$HOME/.local/bin/unlock"
+
 
 # Many of these environment variable are required for python and LibreOffice imports to work correctly.
 # For instance without proper environment vars: from com.sun.star.frame import XComponentLoader # results in error
@@ -55,12 +49,12 @@ RUN mkdir -p /usr/lib/libreoffice/share/extensions \
 # os.environ
 # See Also: https://uucode.com/blog/2013/01/09/solved-createinstancewithcontext-binary-urp-bridge-disposed-during-call/
 # Note: not all os's need extra LibreOffice Environment Vars, I did not have to do this for Ubuntu
-ENV PATH="$HOME/.local/bin:/usr/lib/libreoffice/program::$PATH" \
+ENV PATH="/usr/lib/libreoffice/program:$PATH" \
     URE_BOOTSTRAP="file:///usr/lib/libreoffice/program/fundamentalrc" \
     PYTHONPATH="/usr/lib/libreoffice/program/../program:$PYTHONPATH" \
     UNO_PATH="/usr/lib/libreoffice/program" \
-    LD_LIBRARY_PATH="/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64/client:/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64/server:/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64/native_threads:/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64" \
-    LIBO_VERSION="7.5.3.2"
+    LD_LIBRARY_PATH="/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64/client:/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64/server:/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64/native_threads:/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64"
+    # LIBO_VERSION="7.5.3.2"
 
 
 # install requirements.txt using pip
@@ -83,6 +77,17 @@ WORKDIR /workspace/libreoffice_python_app
 
 # EXPOSE $CODE_PORT
 COPY ./.devcontainer/app_mode/root/defaults /defaults
-RUN chmod +x /defaults/autostart
-# ENTRYPOINT [ "/defaults/autostart" ]
-# CMD [ "sleep", "infinity" ]
+COPY ./.devcontainer/app_mode/startup.sh /usr/local/bin/startup.sh
+
+# Moved extension install to to here 
+RUN mv /tmp/res/scripts/unlock "/usr/local/bin/unlock" \
+    && chmod +x "/usr/local/bin/unlock" \
+    && chmod +x /defaults/autostart \
+    && mkdir -p "$HOME/.config/libreoffice/4/user/" \
+    && mv /tmp/res/defaults/registrymodifications.xcu "$HOME/.config/libreoffice/4/user/registrymodifications.xcu" \
+    && mkdir -p /usr/lib/libreoffice/share/extensions \
+    # && /tmp/res/scripts/ext.sh \
+    && chmod +x /usr/local/bin/startup.sh
+
+# ENTRYPOINT ["/usr/local/bin/startup.sh"]
+

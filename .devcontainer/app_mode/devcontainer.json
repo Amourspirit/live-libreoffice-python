@@ -19,6 +19,10 @@
 		"3003": {
 			"visibility": "private",
 			"label": "LibreOffice https Server"
+		},
+		"2002": {
+			"onAutoForward": "silent",
+			"visibility": "private"
 		}
 	},
 	
@@ -43,17 +47,26 @@
 				"hbenl.vscode-test-explorer",
 				"Phu1237.vs-browser",
 				"streetsidesoftware.code-spell-checker"
-			]
-		},
-		// Adds VS Code settings.json values into the environment.
-		"settings": {
-			"terminal.integrated.shell.linux": "/bin/ash",
-			"vs-browser.url": "http://localhost:3002"
+			],
+			// Adds VS Code settings.json values into the environment.
+			"settings": {
+				"terminal.integrated.profiles.linux": {
+					"ash": {
+						"path": "/bin/ash",
+						"args": [
+							"-l"
+						]
+					}
+				},
+				"vs-browser.url": "http://localhost:3002"
+			}
 		}
 	},
 	// Did not work when placed in brackets. Only as string. Brackets need to call /usr/bin/sh -c
 	"initializeCommand": "echo $PWD && if which git >/dev/null && [ x\"${HOME}\" != \"x\" ] && [ -n \"$(git config --global user.name)\" ] && [ -n \"$(git config --global user.email)\" ]; then echo \"GIT_AUTHOR_NAME=$(git config --global user.name)\nGIT_AUTHOR_EMAIL=$(git config --global user.email)\" > .devcontainer/app_mode/.env || true; else echo \"GIT_AUTHOR_NAME=\"\"\nGIT_AUTHOR_EMAIL=\"\"\" > .devcontainer/app_mode/.env || true; fi && echo \"PUID=$(id -u $USER)\nPGID=$(id -g $USER)\" > .devcontainer/app_mode/user.env",
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "uname -a",
-	"postCreateCommand": ["nohup", "bash", "/defaults/autostart"]
+	// "postCreateCommand": "nohup bash /defaults/autostart > /var/log/autostart.log 2>&1"
+	"postCreateCommand": "bash /usr/local/bin/startup.sh && nohup bash /defaults/autostart > /var/log/autostart.log 2>&1"
+
 }

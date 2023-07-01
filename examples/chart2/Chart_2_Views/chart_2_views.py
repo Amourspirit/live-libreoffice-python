@@ -79,8 +79,10 @@ class Chart2View:
 
         try:
             doc = Calc.open_doc(fnm=self._data_fnm, loader=loader)
-            GUI.set_visible(is_visible=True, odoc=doc)
-            sheet = Calc.get_sheet(doc=doc, index=0)
+            GUI.set_visible(visible=True, doc=doc)
+            Lo.delay(300)
+            Calc.zoom_value(doc=doc, value=75)
+            sheet = Calc.get_sheet(doc=doc, idx=0)
 
             chart_doc = None
             if self._chart_kind == ChartKind.AREA:
@@ -94,7 +96,7 @@ class Chart2View:
             elif self._chart_kind == ChartKind.COLUMN_LINE:
                 chart_doc = self._col_line_chart(doc=doc, sheet=sheet)
             elif self._chart_kind == ChartKind.COLUMN_MULTI:
-                chart_doc = self._mult_col_chart(doc=doc, sheet=sheet)
+                chart_doc = self._multi_col_chart(doc=doc, sheet=sheet)
             elif self._chart_kind == ChartKind.DONUT:
                 chart_doc = self._donut_chart(doc=doc, sheet=sheet)
             elif self._chart_kind == ChartKind.HAPPY_STOCK:
@@ -165,7 +167,7 @@ class Chart2View:
         Chart2.rotate_y_axis_title(chart_doc=chart_doc, angle=Angle(90))
         return chart_doc
 
-    def _mult_col_chart(self, doc: XSpreadsheetDocument, sheet: XSpreadsheet) -> XChartDocument:
+    def _multi_col_chart(self, doc: XSpreadsheetDocument, sheet: XSpreadsheet) -> XChartDocument:
         # draws a multiple column chart: 2D and 3D
         # uses "States with the Most Colleges and Universities by Type"
         range_addr = Calc.get_address(sheet=sheet, range_name="E15:G21")

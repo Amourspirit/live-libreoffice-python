@@ -94,6 +94,12 @@
             ],
             "console": "integratedTerminal",
             "justMyCode": false
+        },
+        {
+            "name": "Macro Debug",
+            "type": "python",
+            "request": "attach",
+            "processId": "${command:pickProcess}"
         }
 
     ]

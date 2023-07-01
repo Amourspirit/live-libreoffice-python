@@ -6,6 +6,9 @@ USER root
 
 RUN apk update \
     && apk add --no-cache git \
+    linux-headers \
+    libc-dev \
+    gcc \
     openssh
 
 ARG HOME=/root

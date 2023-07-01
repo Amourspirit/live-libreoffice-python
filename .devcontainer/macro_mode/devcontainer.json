@@ -46,12 +46,19 @@
 				"hbenl.vscode-test-explorer",
 				"Phu1237.vs-browser",
 				"streetsidesoftware.code-spell-checker"
-			]
-		},
-		// Adds VS Code settings.json values into the environment.
-		"settings": {
-			"terminal.integrated.shell.linux": "/bin/ash",
-			"vs-browser.url": "http://localhost:3004"
+			],
+			// Adds VS Code settings.json values into the environment.
+			"settings": {
+				"terminal.integrated.profiles.linux": {
+					"ash": {
+						"path": "/bin/ash",
+						"args": [
+							"-l"
+						]
+					}
+				},
+				"vs-browser.url": "http://localhost:3004"
+			}
 		}
 	},
 	// Did not work when placed in brackets. Only as string. Brackets need to call /usr/bin/sh -c

@@ -26,8 +26,8 @@ RUN sed -i "s/libreoffice/soffice --accept=\"socket,host=localhost,port=${CODE_P
 
 # Codespaces mounts its own /tmp directory, so we need to create a new one
 COPY ./.devcontainer/res $HOME/.tmp/res
-COPY ./.devcontainer/app_mode/local_res $HOME/.tmp/local_res
-COPY ./.devcontainer/rc.txt $HOME/.ashrc
+COPY ./.devcontainer/res $HOME/.tmp/res
+COPY ./.devcontainer/root/rc.txt $HOME/.ashrc
 
 
 ENV HOME=$HOME \
@@ -62,8 +62,8 @@ RUN if [ x"$GIT_AUTHOR_NAME" != "x" ]; then git config --global user.name "$GIT_
 # install requirements.txt using pip
 # don't need pip so add and remove it to keep image size smaller
 RUN  /usr/bin/pip install "poetry==$POETRY_VERSION" \
-    && if [ -f "$HOME/.tmp/local_res/req/requirements.txt" ]; then \
-    /usr/bin/pip install --no-cache-dir -r "$HOME/.tmp/local_res/req/requirements.txt"; fi
+    && if [ -f "$HOME/.tmp/res/req/requirements.txt" ]; then \
+    /usr/bin/pip install --no-cache-dir -r "$HOME/.tmp/res/req/requirements.txt"; fi
 
 WORKDIR /workspace/libreoffice_python_app
 COPY ./pyproject.toml ./poetry.lock ./poetry.toml ./
@@ -78,8 +78,8 @@ RUN MY_PY_VER=$(python -c "import sys; major, minor = sys.version_info[:2]; prin
 WORKDIR /workspace/libreoffice_python_app
 
 # EXPOSE $CODE_PORT
-COPY ./.devcontainer/app_mode/root/defaults /defaults
-COPY ./.devcontainer/app_mode/startup.sh /usr/local/bin/startup.sh
+COPY ./.devcontainer/root/defaults /defaults
+COPY ./.devcontainer/startup.sh /usr/local/bin/startup.sh
 
 # Moved extension install to to here 
 RUN mv "$HOME/.tmp/res/scripts/unlock.sh" "/usr/local/bin/unlock" \
@@ -90,7 +90,7 @@ RUN mv "$HOME/.tmp/res/scripts/unlock.sh" "/usr/local/bin/unlock" \
     && mkdir -p /usr/lib/libreoffice/share/extensions \
     # && /tmp/res/scripts/ext.sh \
     && chmod +x /usr/local/bin/startup.sh \
-    && mv "$HOME/.tmp/local_res/scripts/reload.sh" "/usr/local/bin/reload" \
+    && mv "$HOME/.tmp/res/scripts/reload.sh" "/usr/local/bin/reload" \
     && chmod +x "/usr/local/bin/reload"
 
 

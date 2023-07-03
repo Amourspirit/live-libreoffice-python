@@ -6,8 +6,8 @@ services:
     network_mode: "bridge"
     # env_file: user.env
     build:
-      context: ../../
-      dockerfile: .devcontainer/app_mode/Dockerfile
+      context: ../
+      dockerfile: .devcontainer/Dockerfile
       args:
         GIT_AUTHOR_NAME: ${GIT_AUTHOR_NAME}
         GIT_AUTHOR_EMAIL: ${GIT_AUTHOR_EMAIL}
@@ -24,13 +24,13 @@ services:
       - DEV_CONTAINER=1
     volumes:
       - type: bind
-        source: ../../
+        source: ../
         target: /workspace/libreoffice_python_app
       - type: bind
-        source: ../../Documents
+        source: ../Documents
         target: /root/Documents
       - type: bind
-        source: ../../macro
+        source: ../macro
         target: /root/.config/libreoffice/4/user/Scripts/python
       - type: volume
         source: app_lo_config

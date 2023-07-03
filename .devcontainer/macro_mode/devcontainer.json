@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
 {
-	"name": "LibreOffice Python",
+	"name": "LibreOffice Python Macros",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "app",
@@ -10,22 +10,21 @@
 	// "features": {},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [3002, 3003],
+	"forwardPorts": [3004, 3005],
 	"portsAttributes": {
-		"3002": {
+		"3004": {
 			"visibility": "private",
-			"label": "LibreOffice Http Server 3002"
+			"label": "LibreOffice http Server"
 		},
-		"3003": {
+		"3005": {
 			"visibility": "private",
-			"label": "LibreOffice Https Server 3003"
+			"label": "LibreOffice https Server"
 		}
 	},
 	
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "uname -a",
-	// "postCreateCommand": "poetry install && . ./.venv/bin/activate && oooenv cmd-link -a",
 
 	// Configure tool-specific properties.
 	// "customizations": {},
@@ -45,14 +44,24 @@
 				"littlefoxteam.vscode-python-test-adapter",
 				"ms-vscode.test-adapter-converter",
 				"hbenl.vscode-test-explorer",
-				"Phu1237.vs-browser"
-			]
-		},
-		"settings": {
-			"terminal.integrated.shell.linux": "/bin/ash"
-		},
+				"Phu1237.vs-browser",
+				"streetsidesoftware.code-spell-checker"
+			],
+			// Adds VS Code settings.json values into the environment.
+			"settings": {
+				"terminal.integrated.profiles.linux": {
+					"ash": {
+						"path": "/bin/ash",
+						"args": [
+							"-l"
+						]
+					}
+				},
+				"vs-browser.url": "http://localhost:3004"
+			}
+		}
 	},
 	// Did not work when placed in brackets. Only as string. Brackets need to call /usr/bin/sh -c
-	"initializeCommand": "echo $PWD && if which git >/dev/null && [ x\"${HOME}\" != \"x\" ] && [ -n \"$(git config --global user.name)\" ] && [ -n \"$(git config --global user.email)\" ]; then echo \"GIT_AUTHOR_NAME=$(git config --global user.name)\nGIT_AUTHOR_EMAIL=$(git config --global user.email)\" > .devcontainer/.env || true; else echo \"GIT_AUTHOR_NAME=\"\"\nGIT_AUTHOR_EMAIL=\"\"\" > .devcontainer/.env || true; fi && echo \"PUID=$(id -u $USER)\nPGID=$(id -g $USER)\" > .devcontainer/user.env"
+	"initializeCommand": "echo $PWD && if which git >/dev/null && [ x\"${HOME}\" != \"x\" ] && [ -n \"$(git config --global user.name)\" ] && [ -n \"$(git config --global user.email)\" ]; then echo \"GIT_AUTHOR_NAME=$(git config --global user.name)\nGIT_AUTHOR_EMAIL=$(git config --global user.email)\" > .devcontainer/macro_mode/.env || true; else echo \"GIT_AUTHOR_NAME=\"\"\nGIT_AUTHOR_EMAIL=\"\"\" > .devcontainer/macro_mode/.env || true; fi && echo \"PUID=$(id -u $USER)\nPGID=$(id -g $USER)\" > .devcontainer/macro_mode/user.env"
 
 }

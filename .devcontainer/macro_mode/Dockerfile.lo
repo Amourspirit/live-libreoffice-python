@@ -1,0 +1,29 @@
+ARG LO_VERSION
+FROM linuxserver/libreoffice:${LO_VERSION}
+
+ENV HOME=/config
+
+RUN apk update \
+    && apk add --no-cache htop
+
+
+COPY ./.devcontainer/res "$HOME/.tmp/res"
+COPY ./.devcontainer/macro_mode/local_res "$HOME/.tmp/local_res"
+COPY ./.devcontainer/macro_mode/startup_lo.sh /usr/local/bin/startup.sh
+
+RUN mkdir -p /usr/lib/libreoffice/share/extensions \
+    && mkdir -p "$HOME/.config/libreoffice/4/user/" \
+    && mv "$HOME/.tmp/res/defaults/registrymodifications.xcu" "$HOME/.config/libreoffice/4/user/registrymodifications.xcu" \
+    && mv "$HOME/.tmp/res/scripts/unlock.sh" "/usr/local/bin/unlock" \
+    && chmod +x "/usr/local/bin/unlock" \
+    && chmod +x "/usr/local/bin/startup.sh" \
+    && "$HOME/.tmp/res/scripts/ext.sh"
+
+# install requirements.txt using pip
+# don't need pip so add and remove it to keep image size smaller
+RUN if [ -f "$HOME/.tmp/local_res/req/requirements.txt" ]; then \
+    apk add --no-cache py-pip \
+    && /usr/bin/pip install --no-cache-dir -r "$HOME/.tmp/local_res/req/requirements.txt" \
+    && apk del py-pip; fi
+
+WORKDIR $HOME

@@ -2,7 +2,7 @@
    # LibreOffice Extensions - bundle install (for all users) just by unzipping!!!
    # https://wiki.documentfoundation.org/Documentation/HowTo/install_extension
    # ------------------------------------------------------------------------------
-   MY_EXTENSIONS_TO_INSTALL_DIR=/tmp/res/ext
+   MY_EXTENSIONS_TO_INSTALL_DIR="$HOME/.tmp/res/ext"
    LO_EXTENSION_DIR=/usr/lib/libreoffice/share/extensions
    if [ -x "${LO_EXTENSION_DIR}/" ]; then
      for EXT_FILE in "${MY_EXTENSIONS_TO_INSTALL_DIR}/"*.oxt ; do

@@ -64,9 +64,10 @@
 	},
 	// Did not work when placed in brackets. Only as string. Brackets need to call /usr/bin/sh -c
 	"initializeCommand": "echo $PWD && if which git >/dev/null && [ x\"${HOME}\" != \"x\" ] && [ -n \"$(git config --global user.name)\" ] && [ -n \"$(git config --global user.email)\" ]; then echo \"GIT_AUTHOR_NAME=$(git config --global user.name)\nGIT_AUTHOR_EMAIL=$(git config --global user.email)\" > .devcontainer/app_mode/.env || true; else echo \"GIT_AUTHOR_NAME=\"\"\nGIT_AUTHOR_EMAIL=\"\"\" > .devcontainer/app_mode/.env || true; fi && echo \"PUID=$(id -u $USER)\nPGID=$(id -g $USER)\" > .devcontainer/app_mode/user.env",
+	// "postStartCommand": "nohup bash /defaults/autostart >> /var/log/autostart.log 2>&1",
+	"postAttachCommand": "nohup bash /defaults/autostart >> /var/log/autostart.log 2>&1",
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "uname -a",
-	// "postCreateCommand": "nohup bash /defaults/autostart > /var/log/autostart.log 2>&1"
 	"postCreateCommand": "bash /usr/local/bin/startup.sh && nohup bash /defaults/autostart > /var/log/autostart.log 2>&1"
 
 }

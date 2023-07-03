@@ -40,15 +40,8 @@ RUN poetry install $(test "$RUN_ENV" == production && echo "--no-dev") --no-inte
 WORKDIR /workspace/libreoffice_python
 
 
-# When in Github codespaces `CODESPACES=true` is set, so we can use that to add git shortcuts.
 RUN if [ x"$GIT_AUTHOR_NAME" != "x" ]; then git config --global user.name "$GIT_AUTHOR_NAME" || true; fi \
-    && if [ x"$GIT_AUTHOR_EMAIL" != "x" ]; then git config --global user.email $GIT_AUTHOR_EMAIL || true; fi \
-    && if [ "$CODESPACES" == "true" ]; then git config --global alias.co checkout \
-    && git config --global alias.br branch \
-    && git config --global alias.ci commit \
-    && git config --global alias.s "status -s" \
-    && git config --global alias.type "cat-file -t" \
-    && git config --global alias.dump "cat-file -p"; fi
+    && if [ x"$GIT_AUTHOR_EMAIL" != "x" ]; then git config --global user.email $GIT_AUTHOR_EMAIL || true; fi
 
 ENV VIRTUAL_ENV=/workspace/libreoffice_python/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"

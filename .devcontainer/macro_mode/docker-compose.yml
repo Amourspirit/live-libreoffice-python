@@ -34,6 +34,8 @@ services:
     build:
       context: ../../
       dockerfile: .devcontainer/macro_mode/Dockerfile.lo
+      args:
+        LO_VERSION: "7.5.3"
     # user: root
     container_name: libreoffice
     security_opt:

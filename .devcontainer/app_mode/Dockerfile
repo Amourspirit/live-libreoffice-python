@@ -1,4 +1,5 @@
-FROM linuxserver/libreoffice:7.5.3
+ARG LO_VERSION
+FROM linuxserver/libreoffice:${LO_VERSION}
 
 ARG CODE_PORT=2002
 ARG HOME=/root
@@ -54,8 +55,9 @@ ENV PATH="/usr/lib/libreoffice/program:$PATH" \
     PYTHONPATH="/usr/lib/libreoffice/program/../program:$PYTHONPATH" \
     UNO_PATH="/usr/lib/libreoffice/program" \
     LD_LIBRARY_PATH="/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64/client:/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64/server:/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64/native_threads:/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64"
-    # LIBO_VERSION="7.5.3.2"
 
+RUN if [ x"$GIT_AUTHOR_NAME" != "x" ]; then git config --global user.name "$GIT_AUTHOR_NAME" || true; fi \
+    && if [ x"$GIT_AUTHOR_EMAIL" != "x" ]; then git config --global user.email $GIT_AUTHOR_EMAIL || true; fi
 
 # install requirements.txt using pip
 # don't need pip so add and remove it to keep image size smaller
@@ -80,14 +82,18 @@ COPY ./.devcontainer/app_mode/root/defaults /defaults
 COPY ./.devcontainer/app_mode/startup.sh /usr/local/bin/startup.sh
 
 # Moved extension install to to here 
-RUN mv "$HOME/.tmp/res/scripts/unlock" "/usr/local/bin/unlock" \
+RUN mv "$HOME/.tmp/res/scripts/unlock.sh" "/usr/local/bin/unlock" \
     && chmod +x "/usr/local/bin/unlock" \
     && chmod +x /defaults/autostart \
     && mkdir -p "$HOME/.config/libreoffice/4/user/" \
     && mv "$HOME/.tmp/res/defaults/registrymodifications.xcu" "$HOME/.config/libreoffice/4/user/registrymodifications.xcu" \
     && mkdir -p /usr/lib/libreoffice/share/extensions \
     # && /tmp/res/scripts/ext.sh \
-    && chmod +x /usr/local/bin/startup.sh
+    && chmod +x /usr/local/bin/startup.sh \
+    && mv "$HOME/.tmp/local_res/scripts/reload.sh" "/usr/local/bin/reload" \
+    && chmod +x "/usr/local/bin/reload"
+
+
 
 # ENTRYPOINT ["/usr/local/bin/startup.sh"]
 

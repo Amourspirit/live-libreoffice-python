@@ -8,4 +8,15 @@ if [ -f "$FILE_LOCK" ]; then
 fi
 # run soffice after ext are installed
 # soffice --headless --terminate_after_init &
+
+# if using github codespace then add some aliases
+if [ "$CODESPACES" == "true" ]; then
+    git config --global alias.co "checkout"
+    git config --global alias.br "branch"
+    git config --global alias.ci "commit"
+    git config --global alias.s "status -s"
+    git config --global alias.type "cat-file -t"
+    git config --global alias.dump "cat-file -p"
+fi
+
 echo "Startup Success!!!"

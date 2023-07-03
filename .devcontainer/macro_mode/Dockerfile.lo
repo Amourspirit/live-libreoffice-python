@@ -1,4 +1,5 @@
-FROM linuxserver/libreoffice:7.5.3
+ARG LO_VERSION
+FROM linuxserver/libreoffice:${LO_VERSION}
 
 ENV HOME=/config
 
@@ -13,9 +14,9 @@ COPY ./.devcontainer/macro_mode/startup_lo.sh /usr/local/bin/startup.sh
 RUN mkdir -p /usr/lib/libreoffice/share/extensions \
     && mkdir -p "$HOME/.config/libreoffice/4/user/" \
     && mv "$HOME/.tmp/res/defaults/registrymodifications.xcu" "$HOME/.config/libreoffice/4/user/registrymodifications.xcu" \
-    && mv "$HOME/.tmp/res/scripts/unlock" "/usr/local/bin/unlock" \
+    && mv "$HOME/.tmp/res/scripts/unlock.sh" "/usr/local/bin/unlock" \
     && chmod +x "/usr/local/bin/unlock" \
-    && chmod +x /usr/local/bin/startup.sh \
+    && chmod +x "/usr/local/bin/startup.sh" \
     && "$HOME/.tmp/res/scripts/ext.sh"
 
 # install requirements.txt using pip

@@ -10,4 +10,15 @@ fi
 soffice --headless --terminate_after_init &
 # this next command does not work properly for some reason so it is added to devcontainer.json
 # nohup bash /defaults/autostart > /var/log/autostart.log 2>&1 &
+
+# if using github codespace then add some aliases
+if [ "$CODESPACES" == "true" ]; then
+    git config --global alias.co "checkout"
+    git config --global alias.br "branch"
+    git config --global alias.ci "commit"
+    git config --global alias.s "status -s"
+    git config --global alias.type "cat-file -t"
+    git config --global alias.dump "cat-file -p"
+fi
+
 echo "Startup Success!!!"

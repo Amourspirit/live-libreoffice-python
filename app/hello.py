@@ -1,5 +1,4 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, cast
 from ooodev.utils.lo import Lo
 from ooodev.utils.gui import GUI, ZoomKind
 from ooodev.office.write import Write
@@ -9,7 +8,7 @@ from ooodev.dialog.msgbox import MsgBox, MessageBoxButtonsEnum, MessageBoxType, 
 from ooodev.format.writer.direct.para.alignment import Alignment
 
 
-def write_hello() -> None:
+def write_hello(show_msg: bool = True) -> None:
     """
     Writes Hello World in Bold to a writer document.
 
@@ -37,17 +36,20 @@ def write_hello() -> None:
         # create font formatting
         ft = Font(size=36, u=True, b=True, color=StandardColor.GREEN_DARK2)
         Write.append_para(cursor=cursor, text="Hello World!", styles=[ft, al])
-        msg_result = MsgBox.msgbox(
-            "Do you wish to close document?",
-            "All done",
-            boxtype=MessageBoxType.QUERYBOX,
-            buttons=MessageBoxButtonsEnum.BUTTONS_YES_NO,
-        )
-        if msg_result == MessageBoxResultsEnum.YES:
-            Lo.close_doc(doc=doc, deliver_ownership=True)
-            Lo.close_office()
+        if show_msg:
+            msg_result = MsgBox.msgbox(
+                "Do you wish to close document?",
+                "All done",
+                boxtype=MessageBoxType.QUERYBOX,
+                buttons=MessageBoxButtonsEnum.BUTTONS_YES_NO,
+            )
+            if msg_result == MessageBoxResultsEnum.YES:
+                Lo.close_doc(doc=doc, deliver_ownership=True)
+                Lo.close_office()
+            else:
+                print("Keeping document open")
         else:
-            print("Keeping document open")
+            return
     except Exception as e:
         Lo.close_office()
         raise

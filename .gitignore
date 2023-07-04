@@ -230,3 +230,4 @@ pip-selfcheck.json
 user.env
 
 !.devcontainer/res/scripts
+tmp/

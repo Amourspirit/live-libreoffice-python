@@ -82,14 +82,15 @@ COPY ./.devcontainer/root/defaults /defaults
 COPY ./.devcontainer/startup.sh /usr/local/bin/startup.sh
 
 # Moved extension install to to here 
-RUN mv "$HOME/.tmp/res/scripts/unlock.sh" "/usr/local/bin/unlock" \
+RUN chmod -R +x "$HOME/.tmp/res/scripts" \
+    && mv "$HOME/.tmp/res/scripts/unlock.sh" "/usr/local/bin/unlock" \
     && chmod +x "/usr/local/bin/unlock" \
-    && chmod +x /defaults/autostart \
+    && chmod +x "/defaults/autostart" \
     && mkdir -p "$HOME/.config/libreoffice/4/user/" \
     && mv "$HOME/.tmp/res/defaults/registrymodifications.xcu" "$HOME/.config/libreoffice/4/user/registrymodifications.xcu" \
-    && mkdir -p /usr/lib/libreoffice/share/extensions \
+    && mkdir -p "/usr/lib/libreoffice/share/extensions" \
     # && /tmp/res/scripts/ext.sh \
-    && chmod +x /usr/local/bin/startup.sh \
+    && chmod +x "/usr/local/bin/startup.sh" \
     && mv "$HOME/.tmp/res/scripts/reload.sh" "/usr/local/bin/reload" \
     && chmod +x "/usr/local/bin/reload"
 

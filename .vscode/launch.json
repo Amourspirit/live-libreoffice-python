@@ -13,43 +13,15 @@
             "justMyCode": true
         },
         {
-            "name": "Python: Not Headless",
+            "name": "Python: Test Cases",
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "console": "integratedTerminal",
-            "justMyCode": true,
-            "env": {
-                "NO_HEADLESS": "1"
-            }
-        },
-        {
-            "name": "Python: Test Local GUI LibreOffice",
-            "type": "python",
-            "console": "integratedTerminal",
-            "request": "launch",
+            "justMyCode": false,
             "purpose": [
                 "debug-test"
             ],
-            "program": "${file}",
-            "env": {
-                "NO_HEADLESS": "0",
-                "ODEV_TEST_CONN_SOCKET": "",
-                "ODEV_TEST_CONN_SOCKET_KIND": "default",
-                "ODEV_TEST_CONN_SOCKET_PORT": "2002",
-            }
-        },
-        {
-            "name": "Python: Current Remote LibreOffice",
-            "type": "python",
-            "console": "integratedTerminal",
-            "request": "launch",
-            "program": "${file}",
-            "env": {
-                "ODEV_TEST_CONN_SOCKET": "true",
-                "ODEV_TEST_CONN_SOCKET_KIND": "no_start",
-                "ODEV_TEST_CONN_SOCKET_PORT": "2002",
-            }
+            "console":"integratedTerminal"
         },
         {
             "name": "Python: Current All Code",
@@ -59,48 +31,5 @@
             "console": "integratedTerminal",
             "justMyCode": false
         },
-        {
-            "name": "Python: Sphinx Docs Linux",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/.venv/bin/sphinx-build",
-            "cwd": "${workspaceFolder}/docs",
-            "args": [
-                "-E",
-                "-b",
-                "html",
-                "-d",
-                "_build/doctrees",
-                ".",
-                "_build/html"
-            ],
-            "console": "integratedTerminal",
-            "justMyCode": false
-        },
-        {
-            "name": "Python: Sphinx Docs Windows",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/.venv/Scripts/sphinx-build.exe",
-            "cwd": "${workspaceFolder}/docs",
-            "args": [
-                "-E",
-                "-b",
-                "html",
-                "-d",
-                "_build/doctrees",
-                ".",
-                "_build/html"
-            ],
-            "console": "integratedTerminal",
-            "justMyCode": false
-        },
-        {
-            "name": "Macro Debug",
-            "type": "python",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
-        }
-
     ]
 }

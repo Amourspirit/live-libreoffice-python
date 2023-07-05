@@ -19,8 +19,9 @@ types-scriptforge = ">=2.0.1"
 black = "^23.3.0"
 lo-dev-search = ">=2.0.2"
 oooenv = ">=0.2.2"
-pytest = "^7.4.0"
 oooscript = "^1.0.0"
+pytest = "^7.4.0"
+pytest-dotenv = "^0.5.2"
 
 [build-system]
 requires = ["poetry-core"]
@@ -43,3 +44,12 @@ disable = """
 [tool.pyright]
 include = ["src"]
 reportMissingModuleSource = false
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
+markers = [
+    "skip_headless: skips a test in headless mode",
+    "skip_not_headless_os: skips a test in GUI mode for give os"
+]

@@ -14,7 +14,8 @@ RUN apk update \
     python3-dev \
     git \
     openssh \
-    py-pip
+    py-pip \
+    github-cli
 
 RUN sed -i "s/libreoffice/soffice --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /defaults/autostart \
     && sed -i "s/--base/--base --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /usr/lib/libreoffice/share/xdg/base.desktop \

@@ -1,9 +1,9 @@
 #/bin/sh
 # install extensions
-bash "$HOME/.tmp/res/scripts/ext.sh"
+bash "$CONFIG_DIR/.tmp/res/scripts/ext.sh"
 
 # run soffice after ext are installed
-bash "$HOME/.tmp/res/scripts/lo_init.sh"
+bash "$CONFIG_DIR/.tmp/res/scripts/lo_init.sh"
 
 # remove the lock file if it exists.
 FILE_LOCK=$CONFIG_DIR/.config/libreoffice/4/.lock

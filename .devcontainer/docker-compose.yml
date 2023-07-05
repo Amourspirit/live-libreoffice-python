@@ -12,7 +12,7 @@ services:
         GIT_AUTHOR_NAME: ${GIT_AUTHOR_NAME}
         GIT_AUTHOR_EMAIL: ${GIT_AUTHOR_EMAIL}
         LO_VERSION: "7.5.3"
-        HOME: /config
+        CONFIG_DIR: /config
     # user: root
     container_name: libreoffice_app
     security_opt:

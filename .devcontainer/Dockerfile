@@ -2,7 +2,7 @@ ARG LO_VERSION
 FROM linuxserver/libreoffice:${LO_VERSION}
 
 ARG CODE_PORT=2002
-ARG HOME=/root
+ARG CONFIG_DIR=/config
 
 # Had Error: Compilation error in psutil/_psutil_linux
 # See Github: https://github.com/giampaolo/psutil//issues/664
@@ -25,13 +25,13 @@ RUN sed -i "s/libreoffice/soffice --accept=\"socket,host=localhost,port=${CODE_P
     && sed -i "s/--writer/--writer --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /usr/lib/libreoffice/share/xdg/writer.desktop
 
 # Codespaces mounts its own /tmp directory, so we need to create a new one
-COPY ./.devcontainer/res $HOME/.tmp/res
-COPY ./.devcontainer/res $HOME/.tmp/res
-COPY ./.devcontainer/root/rc.sh $HOME/.ashrc
-COPY ./.devcontainer/root/rc_custom.sh $HOME/.rc_custom
+COPY ./.devcontainer/res $CONFIG_DIR/.tmp/res
+COPY ./.devcontainer/res $CONFIG_DIR/.tmp/res
+COPY ./.devcontainer/root/rc.sh $CONFIG_DIR/.ashrc
+COPY ./.devcontainer/root/rc_custom.sh $CONFIG_DIR/.rc_custom
 
 
-ENV HOME=$HOME \
+ENV HOME=$CONFIG_DIR \
     RUN_ENV=${RUN_ENV} \
     PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1 \
@@ -40,7 +40,7 @@ ENV HOME=$HOME \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_DEFAULT_TIMEOUT=100 \
     POETRY_VERSION=1.5.1 \
-    ENV=$HOME/.ashrc
+    ENV=$CONFIG_DIR/.ashrc
 
 
 RUN if [ x"$GIT_AUTHOR_NAME" != "x" ]; then git config --global user.name "$GIT_AUTHOR_NAME" || true; fi \
@@ -49,8 +49,8 @@ RUN if [ x"$GIT_AUTHOR_NAME" != "x" ]; then git config --global user.name "$GIT_
 # install requirements.txt using pip
 # don't need pip so add and remove it to keep image size smaller
 RUN  /usr/bin/pip install "poetry==$POETRY_VERSION" \
-    && if [ -f "$HOME/.tmp/res/req/requirements.txt" ]; then \
-    /usr/bin/pip install --no-cache-dir -r "$HOME/.tmp/res/req/requirements.txt"; fi
+    && if [ -f "$CONFIG_DIR/.tmp/res/req/requirements.txt" ]; then \
+    /usr/bin/pip install --no-cache-dir -r "$CONFIG_DIR/.tmp/res/req/requirements.txt"; fi
 
 WORKDIR /workspace/libreoffice_python_app
 COPY ./pyproject.toml ./poetry.lock ./poetry.toml ./
@@ -86,15 +86,15 @@ COPY ./.devcontainer/root/defaults /defaults
 COPY ./.devcontainer/startup.sh /usr/local/bin/startup.sh
 
 # Moved extension install to to here 
-RUN chmod -R +x "$HOME/.tmp/res/scripts" \
-    && mv "$HOME/.tmp/res/scripts/unlock.sh" "/usr/local/bin/unlock" \
+RUN chmod -R +x "$CONFIG_DIR/.tmp/res/scripts" \
+    && mv "$CONFIG_DIR/.tmp/res/scripts/unlock.sh" "/usr/local/bin/unlock" \
     && chmod +x "/usr/local/bin/unlock" \
     && chmod +x "/defaults/autostart" \
-    && mkdir -p "$HOME/.config/libreoffice/4/user/" \
-    && mv "$HOME/.tmp/res/defaults/registrymodifications.xcu" "$HOME/.config/libreoffice/4/user/registrymodifications.xcu" \
+    && mkdir -p "$CONFIG_DIR/.config/libreoffice/4/user/" \
+    && mv "$CONFIG_DIR/.tmp/res/defaults/registrymodifications.xcu" "$CONFIG_DIR/.config/libreoffice/4/user/registrymodifications.xcu" \
     && mkdir -p "/usr/lib/libreoffice/share/extensions" \
     && chmod +x "/usr/local/bin/startup.sh" \
-    && mv "$HOME/.tmp/res/scripts/reload.sh" "/usr/local/bin/reload" \
+    && mv "$CONFIG_DIR/.tmp/res/scripts/reload.sh" "/usr/local/bin/reload" \
     && chmod +x "/usr/local/bin/reload"
 
 # ENTRYPOINT ["/usr/local/bin/startup.sh"]

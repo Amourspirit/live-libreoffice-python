@@ -23,7 +23,8 @@ jobs:
     - name: Make envfile
       uses: SpicyPizza/create-envfile@v2.0
       with:
-        directory: .devcontainer
+        envkey_DEBUG: false
+        directory: live-libreoffice-python/.devcontainer
         fail_on_empty: false
 
     - name: Checkout code

@@ -5,9 +5,9 @@ name: Test
 
 on:
   push:
-    branches: [ "main", "container" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main", "container" ]
+    branches: [ "main" ]
 
 permissions:
   contents: read

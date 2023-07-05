@@ -5,9 +5,9 @@ name: Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "container" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "container" ]
 
 permissions:
   contents: read
@@ -29,6 +29,9 @@ jobs:
         envkey_DEBUG: false
         directory: .devcontainer
         fail_on_empty: false
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
 
     - name: Build docker images
       run: docker-compose build

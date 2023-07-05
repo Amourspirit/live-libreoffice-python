@@ -27,7 +27,8 @@ RUN sed -i "s/libreoffice/soffice --accept=\"socket,host=localhost,port=${CODE_P
 # Codespaces mounts its own /tmp directory, so we need to create a new one
 COPY ./.devcontainer/res $HOME/.tmp/res
 COPY ./.devcontainer/res $HOME/.tmp/res
-COPY ./.devcontainer/root/rc.txt $HOME/.ashrc
+COPY ./.devcontainer/root/rc.sh $HOME/.ashrc
+COPY ./.devcontainer/root/rc_custom.sh $HOME/.rc_custom
 
 
 ENV HOME=$HOME \

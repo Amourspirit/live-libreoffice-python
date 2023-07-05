@@ -24,7 +24,7 @@ jobs:
       uses: SpicyPizza/create-envfile@v2.0
       with:
         directory: ${{ github.workspace }}/.devcontainer
-        GITHUB_TEST: true
+        fail_on_empty: false
 
     - name: Checkout code
       uses: actions/checkout@v3

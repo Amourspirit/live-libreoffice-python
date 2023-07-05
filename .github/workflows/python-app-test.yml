@@ -20,6 +20,12 @@ jobs:
       COMPOSE_FILE: .devcontainer/docker-compose.yml
 
     steps:
+    - name: Make envfile
+      uses: SpicyPizza/create-envfile@v2.0
+      with:
+        directory: ${{ github.workspace }}/.devcontainer
+        GITHUB_TEST: true
+
     - name: Checkout code
       uses: actions/checkout@v3
 

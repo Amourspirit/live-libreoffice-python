@@ -12,6 +12,7 @@ services:
         GIT_AUTHOR_NAME: ${GIT_AUTHOR_NAME}
         GIT_AUTHOR_EMAIL: ${GIT_AUTHOR_EMAIL}
         LO_VERSION: "7.5.3"
+        HOME: /config
     # user: root
     container_name: libreoffice_app
     security_opt:
@@ -28,10 +29,10 @@ services:
         target: /workspace/libreoffice_python_app
       - type: bind
         source: ../Documents
-        target: /root/Documents
+        target: /config/Documents
       - type: bind
         source: ../macro
-        target: /root/.config/libreoffice/4/user/Scripts/python
+        target: /config/.config/libreoffice/4/user/Scripts/python
       - type: volume
         source: app_lo_config
         target: /config

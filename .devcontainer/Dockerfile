@@ -5,7 +5,7 @@ ARG CODE_PORT=2002
 ARG HOME=/root
 
 # Had Error: Compilation error in psutil/_psutil_linux
-# See Github: https://github.com/giampaolo/psutil/issues/664
+# See Github: https://github.com/giampaolo/psutil//issues/664
 RUN apk update \
     && apk add --no-cache htop \
     linux-headers \
@@ -54,7 +54,7 @@ RUN  /usr/bin/pip install "poetry==$POETRY_VERSION" \
 
 WORKDIR /workspace/libreoffice_python_app
 COPY ./pyproject.toml ./poetry.lock ./poetry.toml ./
-RUN poetry install $(test "$RUN_ENV" == production && echo "--no-dev") --no-interaction --no-ansi --no-root \
+RUN poetry install $(test "$RUN_ENV" == production && echo "--no-dev") --no-interaction --no-ansi --no-root --no-cache \
     && sed -i "s/include-system-site-packages = false/include-system-site-packages = true/g" /workspace/libreoffice_python_app/.venv/pyvenv.cfg
 
 # Many of these environment variable are required for python and LibreOffice imports to work correctly.
@@ -75,7 +75,7 @@ ENV PATH="/workspace/libreoffice_python_app/.venv/bin:/usr/lib/libreoffice/progr
     LD_LIBRARY_PATH="/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64/client:/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64/server:/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64/native_threads:/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64"
 
 RUN MY_PY_VER=$(python -c "import sys; major, minor = sys.version_info[:2]; print(f'{major}.{minor}');" ) \
-    && echo $MY_PY_VER \
+    && echo "Python version: $MY_PY_VER" \
     && echo "/workspace/libreoffice_python_app" >> "/workspace/libreoffice_python_app/.venv/lib/python$MY_PY_VER/site-packages/ooo_dev_tools.pth" \
     && echo "/usr/lib/libreoffice/program" >> "/workspace/libreoffice_python_app/.venv/lib/python$MY_PY_VER/site-packages/libreoffice_program.pth"
 

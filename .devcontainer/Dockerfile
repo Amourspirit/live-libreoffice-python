@@ -26,13 +26,14 @@ RUN sed -i "s/libreoffice/soffice --accept=\"socket,host=localhost,port=${CODE_P
 
 # Codespaces mounts its own /tmp directory, so we need to create a new one
 COPY ./.devcontainer/res $CONFIG_DIR/.tmp/res
-COPY ./.devcontainer/res $CONFIG_DIR/.tmp/res
-COPY ./.devcontainer/root/rc.sh $CONFIG_DIR/.ashrc
+COPY ./.devcontainer/root/rc_custom.sh $CONFIG_DIR/.tmp/rc_custom.sh
+COPY ./.devcontainer/root/.ashrc $CONFIG_DIR/.tmp/.ashrc
+COPY ./.devcontainer/root/.ashrc $CONFIG_DIR/.ashrc
 COPY ./.devcontainer/root/rc_custom.sh $CONFIG_DIR/.rc_custom
 
 
-ENV HOME=$CONFIG_DIR \
-    RUN_ENV=${RUN_ENV} \
+# ENV HOME=$CONFIG_DIR \
+ENV RUN_ENV=${RUN_ENV} \
     PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONHASHSEED=random \

@@ -1,4 +1,7 @@
 #!/bin/sh
+# this script is call by running unlock on the command line in the contanier.
+# This script will kill any running instances of Libreoffice and remove the lock file.
+
 # kill soffice if it's running
 pkill -SIGKILL soffice 2>/dev/null || true
 

@@ -17,6 +17,19 @@ RUN apk update \
     py-pip \
     github-cli
 
+# install rust
+# This is baffling but for a few hours of trying to building this image I could not get poetry to install without rust.
+# This was the case for both local and codespaces.
+# This was on July 6th 2023.  I had to install rust to get poetry to install.
+# Uncomment to install rust. Add PATH="$CONFIG_DIR/.cargo/bin:$PATH" to environment.
+# RUN echo "Installing Rust into $CONFIG_DIR/.cargo/env" \
+#     && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
+#     && source "$CONFIG_DIR/.cargo/env" \
+#     && rustup install stable \
+#     && rustup default stable \
+#     && rustup update \
+#     && rustup component add rls rust-analysis rust-src
+
 RUN sed -i "s/libreoffice/soffice --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /defaults/autostart \
     && sed -i "s/--base/--base --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /usr/lib/libreoffice/share/xdg/base.desktop \
     && sed -i "s/--calc/--calc --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /usr/lib/libreoffice/share/xdg/calc.desktop \
@@ -41,6 +54,7 @@ ENV RUN_ENV=${RUN_ENV} \
     PIP_DEFAULT_TIMEOUT=100 \
     POETRY_VERSION=1.5.1 \
     ENV=$CONFIG_DIR/.ashrc
+    # PATH="$CONFIG_DIR/.cargo/bin:$PATH"
 
 
 RUN if [ x"$LOCAL_GIT_AUTHOR_NAME" != "x" ]; then git config --global user.name "$LOCAL_GIT_AUTHOR_NAME" || true; fi \

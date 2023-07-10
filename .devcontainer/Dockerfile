@@ -53,6 +53,7 @@ ENV RUN_ENV=${RUN_ENV} \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_DEFAULT_TIMEOUT=100 \
     POETRY_VERSION=1.5.1 \
+    LO_CONN_PORT=${CODE_PORT} \
     ENV=$CONFIG_DIR/.ashrc
     # PATH="$CONFIG_DIR/.cargo/bin:$PATH"
 
@@ -60,8 +61,7 @@ ENV RUN_ENV=${RUN_ENV} \
 RUN if [ x"$LOCAL_GIT_AUTHOR_NAME" != "x" ]; then git config --global user.name "$LOCAL_GIT_AUTHOR_NAME" || true; fi \
     && if [ x"$LOCAL_GIT_AUTHOR_EMAIL" != "x" ]; then git config --global user.email $LOCAL_GIT_AUTHOR_EMAIL || true; fi
 
-# install requirements.txt using pip
-# don't need pip so add and remove it to keep image size smaller
+# install poetry and requirements.txt using pip
 RUN  /usr/bin/pip install "poetry==$POETRY_VERSION" \
     && if [ -f "$CONFIG_DIR/.tmp/res/req/requirements.txt" ]; then \
     /usr/bin/pip install --no-cache-dir -r "$CONFIG_DIR/.tmp/res/req/requirements.txt"; fi
@@ -84,10 +84,12 @@ RUN poetry install $(test "$RUN_ENV" == production && echo "--no-dev") --no-inte
 #   When Poetry installls the virtual environment it will be modified to include the system site packages.
 ENV PATH="/workspace/libreoffice_python_app/.venv/bin:/usr/lib/libreoffice/program:$PATH" \
     URE_BOOTSTRAP="file:///usr/lib/libreoffice/program/fundamentalrc" \
-    PYTHONPATH="/usr/lib/libreoffice/program/../program:$PYTHONPATH" \
+    # PYTHONPATH="/usr/lib/libreoffice/program/../program:$PYTHONPATH" \
+    PYTHONPATH="/usr/lib/libreoffice/program:$PYTHONPATH" \
     UNO_PATH="/usr/lib/libreoffice/program" \
     LD_LIBRARY_PATH="/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64/client:/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64/server:/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64/native_threads:/usr/lib/jvm/java-1.8-openjdk/jre/lib/amd64"
 
+# Cannot persist python version into build here so, get the python version and run all the commands the use it.
 RUN MY_PY_VER=$(python -c "import sys; major, minor = sys.version_info[:2]; print(f'{major}.{minor}');" ) \
     && echo "Python version: $MY_PY_VER" \
     && echo "/workspace/libreoffice_python_app" >> "/workspace/libreoffice_python_app/.venv/lib/python$MY_PY_VER/site-packages/ooo_dev_tools.pth" \
@@ -103,6 +105,8 @@ COPY ./.devcontainer/startup.sh /usr/local/bin/startup.sh
 RUN chmod -R +x "$CONFIG_DIR/.tmp/res/scripts" \
     && mv "$CONFIG_DIR/.tmp/res/scripts/unlock.sh" "/usr/local/bin/unlock" \
     && chmod +x "/usr/local/bin/unlock" \
+    && mv "$CONFIG_DIR/.tmp/res/scripts/lo_console.py" "/usr/local/bin/lo_console" \
+    && chmod +x "/usr/local/bin/lo_console" \
     && chmod +x "/defaults/autostart" \
     && mkdir -p "$CONFIG_DIR/.config/libreoffice/4/user/" \
     && mv "$CONFIG_DIR/.tmp/res/defaults/registrymodifications.xcu" "$CONFIG_DIR/.config/libreoffice/4/user/registrymodifications.xcu" \

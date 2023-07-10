@@ -4,12 +4,12 @@
 # If you need custom initialization, add them here.
 
 # install extensions that reside in the .devcontainer/res/ext folder
-bash "$CONFIG_DIR/.tmp/res/scripts/ext.sh"
+source "$CONFIG_DIR/.tmp/res/scripts/ext.sh"
 
 # run soffice after ext are installed.
 # Some extensions such as the MRI extnesion seem to need an initial run to configure and work properly.
 # This call runs office in the background and then kills it after specified time.
-bash "$CONFIG_DIR/.tmp/res/scripts/lo_init.sh"
+source "$CONFIG_DIR/.tmp/res/scripts/lo_init.sh"
 
 # remove the lock file if it exists.
 # This is needed because sometimes libreoffice does not close properly and the lock file is not removed.

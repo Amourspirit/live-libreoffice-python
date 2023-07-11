@@ -37,7 +37,12 @@ RUN apk update \
 #     && rustup update \
 #     && rustup component add rls rust-analysis rust-src
 
-RUN sed -i "s/libreoffice/soffice --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /defaults/autostart \
+
+# RUN chsh -s /bin/bash root
+# root:x:0:0:root:/root:/bin/ash
+
+RUN sed -i "s/\/bin\/ash/\/bin\/bash/g" /etc/passwd \
+    && sed -i "s/libreoffice/soffice --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /defaults/autostart \
     && sed -i "s/--base/--base --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /usr/lib/libreoffice/share/xdg/base.desktop \
     && sed -i "s/--calc/--calc --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /usr/lib/libreoffice/share/xdg/calc.desktop \
     && sed -i "s/--draw/--draw --accept=\"socket,host=localhost,port=${CODE_PORT},tcpNoDelay=1;urp;StarOffice.ServiceManager\"/g" /usr/lib/libreoffice/share/xdg/draw.desktop \
@@ -47,12 +52,14 @@ RUN sed -i "s/libreoffice/soffice --accept=\"socket,host=localhost,port=${CODE_P
 
 # Codespaces mounts its own /tmp directory, so we need to create a new one
 COPY ./.devcontainer/res $CONFIG_DIR/.tmp/res
-COPY ./.devcontainer/root/rc.sh $CONFIG_DIR/.ashrc
-COPY ./.devcontainer/root/rc_custom.sh $CONFIG_DIR/.rc_custom
+COPY ./.devcontainer/root/rc.sh /etc/profile.d/10bashrc.sh
+COPY ./.devcontainer/root/bashrc.sh $CONFIG_DIR/.bashrc
+COPY ./.devcontainer/root/bash_custom.sh $CONFIG_DIR/.bashrc_custom
 
 
 # ENV HOME=$CONFIG_DIR \
 ENV RUN_ENV=${RUN_ENV} \
+    LANG=C.UTF-8 \
     PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONHASHSEED=random \
@@ -60,8 +67,8 @@ ENV RUN_ENV=${RUN_ENV} \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_DEFAULT_TIMEOUT=100 \
     POETRY_VERSION=1.5.1 \
-    LO_CONN_PORT=${CODE_PORT} \
-    ENV=$CONFIG_DIR/.ashrc
+    LO_CONN_PORT=${CODE_PORT}
+    # ENV=$CONFIG_DIR/.bashrc
     # PATH="$CONFIG_DIR/.cargo/bin:$PATH"
 
 

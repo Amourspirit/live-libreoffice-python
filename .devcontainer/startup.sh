@@ -32,4 +32,7 @@ if [ "$CODESPACES" == "true" ]; then
     git config --local alias.dump "cat-file -p"
 fi
 
+mkdir -p "$CONFIG_DIR/.config/gtk-3.0"
+echo "file:///workspace/libreoffice_python_app" > "$CONFIG_DIR/.config/gtk-3.0/bookmarks"
+
 echo "Startup Success!!!"

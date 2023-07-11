@@ -9,13 +9,20 @@ ARG CONFIG_DIR=/config
 RUN apk update \
     && apk add --no-cache htop \
     linux-headers \
-    libc-dev \
+    libc-dev \  
     gcc \
     python3-dev \
     git \
     openssh \
     py-pip \
-    github-cli
+    github-cli \
+    subversion \
+    make 
+
+# https://pkgs.alpinelinux.org/package/edge/main/x86/subversion
+# subversion can be used to download github repos subfolders. Great for downloading just a single folder from a repo.
+# Can be run as examples.
+# https://stackoverflow.com/questions/7106012/download-a-single-folder-or-directory-from-a-github-repo
 
 # install rust
 # This is baffling but for a few hours of trying to building this image I could not get poetry to install without rust.
@@ -105,8 +112,8 @@ COPY ./.devcontainer/startup.sh /usr/local/bin/startup.sh
 RUN chmod -R +x "$CONFIG_DIR/.tmp/res/scripts" \
     && mv "$CONFIG_DIR/.tmp/res/scripts/unlock.sh" "/usr/local/bin/unlock" \
     && chmod +x "/usr/local/bin/unlock" \
-    && mv "$CONFIG_DIR/.tmp/res/scripts/lo_console.py" "/usr/local/bin/lo_console" \
-    && chmod +x "/usr/local/bin/lo_console" \
+    && mv "$CONFIG_DIR/.tmp/res/scripts/lo_console.py" "/usr/local/bin/console" \
+    && chmod +x "/usr/local/bin/console" \
     && chmod +x "/defaults/autostart" \
     && mkdir -p "$CONFIG_DIR/.config/libreoffice/4/user/" \
     && mv "$CONFIG_DIR/.tmp/res/defaults/registrymodifications.xcu" "$CONFIG_DIR/.config/libreoffice/4/user/registrymodifications.xcu" \

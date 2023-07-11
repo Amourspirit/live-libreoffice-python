@@ -17,6 +17,7 @@ except ImportError:
     SystemExit(1)
 
 from ooodev.conn.connectors import ConnectSocket
+from ooodev.utils.inst.lo.options import Options
 
 
 def check_if_process_running(process_name: str) -> bool:
@@ -38,10 +39,21 @@ lo_port = int(getenv("LO_CONN_PORT", 2002))
 variables = globals().copy()
 variables.update(locals())
 if check_if_process_running("soffice.bin"):
-    _ = Lo.load_office(connector=ConnectSocket(host="localhost", port=lo_port, start_office=False))
+    _ = Lo.load_office(
+        connector=ConnectSocket(
+            host="localhost", port=lo_port, start_office=False, options=Options(verbose=True, dynamic=True)
+        )
+    )
 else:
     _ = Lo.load_office(
-        connector=ConnectSocket(host="localhost", port=lo_port, start_office=True, invisible=False, headless=False)
+        connector=ConnectSocket(
+            host="localhost",
+            port=lo_port,
+            start_office=True,
+            invisible=False,
+            headless=False,
+            options=Options(verbose=True, dynamic=True),
+        )
     )
 variables["XSCRIPTCONTEXT"] = Lo.XSCRIPTCONTEXT
 

@@ -127,7 +127,9 @@ RUN chmod -R +x "$CONFIG_DIR/.tmp/res/scripts" \
     && mkdir -p "/usr/lib/libreoffice/share/extensions" \
     && chmod +x "/usr/local/bin/startup.sh" \
     && mv "$CONFIG_DIR/.tmp/res/scripts/reload.sh" "/usr/local/bin/reload" \
-    && chmod +x "/usr/local/bin/reload"
+    && chmod +x "/usr/local/bin/reload" \
+    && mv "$CONFIG_DIR/.tmp/res/scripts/gitget.sh" "/usr/local/bin/gitget" \
+    && chmod +x "/usr/local/bin/gitget"
 
 # ENTRYPOINT ["/usr/local/bin/startup.sh"]
 

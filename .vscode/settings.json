@@ -231,6 +231,7 @@
         "PROGRAMFILES",
         "Protectable",
         "proto",
+        "psutil",
         "PYPI",
         "PYTHONPATH",
         "pyuno",

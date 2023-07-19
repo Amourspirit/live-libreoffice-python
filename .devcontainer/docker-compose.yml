@@ -21,6 +21,7 @@ services:
       - PGID=0
       - CONFIG_DIR=/config
       - DEV_CONTAINER=1
+      - WORK_DIR=/workspace/libreoffice_python_app
     volumes:
       - type: bind
         source: ../

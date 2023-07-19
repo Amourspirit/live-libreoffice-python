@@ -1,8 +1,21 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
+# load variables before other imports
+# this prevents other imports from being loaded into the console such as
+# code, readline, psutils, etc.
+variables = globals().copy()
+variables.update(locals())
+from typing import cast, Any, TYPE_CHECKING
 import code
 import rlcompleter
 import readline
 from os import getenv
+
+try:
+    from ooo_dev_cli_hlp.cli.interactive_hlp import interactive_hlp
+except ImportError:
+    interactive_hlp = None
 
 try:
     import psutil
@@ -14,6 +27,9 @@ try:
     from ooodev.utils.lo import Lo
 except ImportError:
     print("ooodev is not installed. Please install it with 'poetry add --group=dev ooodev'")
+    if TYPE_CHECKING:
+        # satisfy type checkers
+        Lo = cast(Any, None)
     SystemExit(1)
 
 from ooodev.conn.connectors import ConnectSocket
@@ -36,8 +52,7 @@ def check_if_process_running(process_name: str) -> bool:
 
 
 lo_port = int(getenv("LO_CONN_PORT", 2002))
-variables = globals().copy()
-variables.update(locals())
+
 if check_if_process_running("soffice.bin"):
     _ = Lo.load_office(
         connector=ConnectSocket(
@@ -55,7 +70,9 @@ else:
             options=Options(verbose=True, dynamic=True),
         )
     )
-variables["XSCRIPTCONTEXT"] = Lo.XSCRIPTCONTEXT
+variables["XSCRIPTCONTEXT"] = Lo.XSCRIPTCONTEXT  # type: ignore
+if interactive_hlp is not None:
+    variables["odh"] = interactive_hlp
 
 # https://stackoverflow.com/questions/50917938/enabling-console-features-with-code-interact
 readline.set_completer(rlcompleter.Completer(variables).complete)
@@ -63,4 +80,21 @@ readline.parse_and_bind("tab: complete")
 
 
 shell = code.InteractiveConsole(variables)
-shell.interact()
+banner = """Entering LibreOffice Python Console.
+
+XSCRIPTCONTEXT is available as XSCRIPTCONTEXT.
+
+To leave the console, press Ctrl+Z or type exit().
+
+Tab Completion is available for objects.
+For example: XSCRIPTCONTEXT. + TAB TAB will show all available methods.
+
+Try: X + TAB
+"""
+if interactive_hlp is not None:
+    banner += """
+OooDev CLI Help is available as odh() function.
+Example: odh("-s Write.append")
+run odh('-h') for more options.
+"""
+shell.interact(banner=banner)

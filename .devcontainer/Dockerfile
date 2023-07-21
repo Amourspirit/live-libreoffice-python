@@ -7,18 +7,18 @@ ARG CONFIG_DIR=/config
 # Had Error: Compilation error in psutil/_psutil_linux
 # See Github: https://github.com/giampaolo/psutil//issues/664
 RUN apk update \
-    && apk add --no-cache htop \
+    && apk add --no-cache --update htop \
     linux-headers \
     libc-dev \  
     gcc \
     python3-dev \
     git \
-    openssh \
     py-pip \
     github-cli \
     subversion \
-    make 
-
+    make \
+    openssh-client-default \
+    openssh
 # https://pkgs.alpinelinux.org/package/edge/main/x86/subversion
 # subversion can be used to download github repos subfolders. Great for downloading just a single folder from a repo.
 # Can be run as examples.

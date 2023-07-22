@@ -16,7 +16,7 @@ This templated can also be leveraged to demonstrate working examples of code.
 
 ## Getting Started
 
-See the [Getting Started](https://github.com/Amourspirit/live-libreoffice-python/wiki/Getting-Started) in the Wiki.
+See the [Getting Started](https://github.com/Amourspirit/live-libreoffice-python/wiki/Getting-Started) in the [Wiki](https://github.com/Amourspirit/live-libreoffice-python/wiki).
 
 [VS Code]:https://code.visualstudio.com/
 

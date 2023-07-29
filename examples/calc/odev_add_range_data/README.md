@@ -28,7 +28,7 @@ make build
 
 ### Compile as Macro
 
-The following command will compile script into `odev_add_range.py` and place it in the `macro` folder.
+The following command will compile script into `odev_add_range.py` and place it in the `macro` folder. After script is compiled it is available as LibreOffice Macros.
 
 ```sh
 make macro

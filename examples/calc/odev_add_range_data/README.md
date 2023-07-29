@@ -34,6 +34,10 @@ The following command will compile script into `odev_add_range.py` and place it 
 make macro
 ```
 
+## Related
+
+See: [How can I compile my project if I have multiple python files?](https://github.com/Amourspirit/live-libreoffice-python/wiki/FAQ#how-can-i-compile-my-project-if-i-have-multiple-python-files)
+
 ![calc_range_macro](https://user-images.githubusercontent.com/4193389/173204999-924f12f6-59df-4bfe-8c2c-bee4cc5b9d6b.gif)
 
 [OOO Development Tools]: https://python-ooo-dev-tools.readthedocs.io/en/latest/

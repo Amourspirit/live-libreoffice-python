@@ -4,7 +4,7 @@
   "app": "WRITER",
   "version": "1.0.0",
   "args": {
-    "src_file": "builder.py",
+    "src_file": "tbl_builder.py",
     "output_name": "builder",
     "single_script": false,
     "clean": true,

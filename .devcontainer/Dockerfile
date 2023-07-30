@@ -9,7 +9,8 @@ ARG CONFIG_DIR=/config
 RUN apk update \
     && apk add --no-cache --update htop \
     linux-headers \
-    libc-dev \  
+    libc-dev \
+    rsync \
     gcc \
     python3-dev \
     git \
@@ -81,8 +82,9 @@ RUN  /usr/bin/pip install "poetry==$POETRY_VERSION" \
     /usr/bin/pip install --no-cache-dir -r "$CONFIG_DIR/.tmp/res/req/requirements.txt"; fi
 
 WORKDIR /workspace/libreoffice_python_app
-COPY ./pyproject.toml ./poetry.lock ./poetry.toml ./
-RUN poetry install $(test "$RUN_ENV" == production && echo "--no-dev") --no-interaction --no-ansi --no-root --no-cache \
+COPY ./pyproject.toml ./poetry.lock ./
+RUN poetry config virtualenvs.in-project true \
+    && poetry install $(test "$RUN_ENV" == production && echo "--no-dev") --no-interaction --no-ansi --no-root --no-cache \
     && sed -i "s/include-system-site-packages = false/include-system-site-packages = true/g" /workspace/libreoffice_python_app/.venv/pyvenv.cfg
 
 # Many of these environment variable are required for python and LibreOffice imports to work correctly.

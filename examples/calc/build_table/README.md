@@ -8,7 +8,7 @@ Example of building different kinds of Spreadsheet Tables.
 
 Also demonstrates create a chart.
 
-This demo uses This demo uses [OOO Development Tools] (ODEV).
+This demo uses This demo uses [OOO Development Tools] (OooDev).
 
 ## Build
 
@@ -32,6 +32,26 @@ The following command will compile script into `builder.py` and place it in the 
 
 ```sh
 make macro
+```
+
+## Run Directly
+
+To start LibreOffice and build table run the following command from this folder.
+
+```sh
+make tbl
+```
+
+or
+
+```sh
+make tbl-style
+```
+
+or
+
+```sh
+make tbl-chart
 ```
 
 ## Related

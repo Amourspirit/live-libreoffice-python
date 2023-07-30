@@ -34,6 +34,14 @@ The following command will compile script into `odev_add_range.py` and place it 
 make macro
 ```
 
+## Run Directly
+
+To start LibreOffice and display a message box run the following command from this folder.
+
+```sh
+make run
+```
+
 ## Related
 
 See: [How can I compile my project if I have multiple python files?](https://github.com/Amourspirit/live-libreoffice-python/wiki/FAQ#how-can-i-compile-my-project-if-i-have-multiple-python-files)

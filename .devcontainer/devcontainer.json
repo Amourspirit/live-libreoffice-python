@@ -14,15 +14,16 @@
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [3002, 3003],
+	// Do not add ports 3002 and 3003 to the portsAttributes. When added they do not work in VS Code when connected remotely to the container.
 	"portsAttributes": {
-		"3002": {
-			"visibility": "private",
-			"label": "LibreOffice http Server"
-		},
-		"3003": {
-			"visibility": "private",
-			"label": "LibreOffice https Server"
-		},
+		// "3002": {
+		// 	"visibility": "private",
+		// 	"label": "LibreOffice http Server"
+		// },
+		// "3003": {
+		// 	"visibility": "private",
+		// 	"label": "LibreOffice https Server"
+		// },
 		"2002": {
 			"onAutoForward": "silent",
 			"visibility": "private"

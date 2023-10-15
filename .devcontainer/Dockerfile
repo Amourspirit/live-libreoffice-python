@@ -77,7 +77,9 @@ RUN if [ x"$LOCAL_GIT_AUTHOR_NAME" != "x" ]; then git config --global user.name 
     && if [ x"$LOCAL_GIT_AUTHOR_EMAIL" != "x" ]; then git config --global user.email $LOCAL_GIT_AUTHOR_EMAIL || true; fi
 
 # install poetry
-RUN  /usr/bin/pip install "poetry==$POETRY_VERSION"
+RUN  /usr/bin/pip install "poetry==$POETRY_VERSION" \
+    && if [ -f "$CONFIG_DIR/.tmp/res/req/requirements.txt" ]; then \
+    /usr/bin/pip install --no-cache-dir -r "$CONFIG_DIR/.tmp/res/req/requirements.txt"; fi
 
 WORKDIR /workspace/libreoffice_python_app
 COPY ./pyproject.toml ./poetry.lock ./
@@ -108,9 +110,9 @@ ENV PATH="/workspace/libreoffice_python_app/.venv/bin:/usr/lib/libreoffice/progr
 RUN MY_PY_VER=$(python -c "import sys; major, minor = sys.version_info[:2]; print(f'{major}.{minor}');" ) \
     && echo "Python version: $MY_PY_VER" \
     && echo "/workspace/libreoffice_python_app" >> "/workspace/libreoffice_python_app/.venv/lib/python$MY_PY_VER/site-packages/ooo_dev_tools.pth" \
-    && echo "/usr/lib/libreoffice/program" >> "/workspace/libreoffice_python_app/.venv/lib/python$MY_PY_VER/site-packages/libreoffice_program.pth" \
-    && if [ -f "$CONFIG_DIR/.tmp/res/req/requirements.txt" ]; then \
-    /usr/bin/pip install --no-cache-dir --target="/workspace/libreoffice_pip_ext/.venv/lib/python$MY_PY_VER/site-packages" -r "$CONFIG_DIR/.tmp/res/req/requirements.txt"; fi
+    && echo "/usr/lib/libreoffice/program" >> "/workspace/libreoffice_python_app/.venv/lib/python$MY_PY_VER/site-packages/libreoffice_program.pth"
+    # && if [ -f "$CONFIG_DIR/.tmp/res/req/requirements.txt" ]; then \
+    # /usr/bin/pip install --no-cache-dir --target="/workspace/libreoffice_pip_ext/.venv/lib/python$MY_PY_VER/site-packages" -r "$CONFIG_DIR/.tmp/res/req/requirements.txt"; fi
 
 WORKDIR /workspace/libreoffice_python_app
 

@@ -1,6 +1,7 @@
 ARG LO_VERSION
 FROM linuxserver/libreoffice:${LO_VERSION}
 
+ARG POETRY_VERSION
 ARG CODE_PORT=2002
 ARG CONFIG_DIR=/config
 
@@ -67,7 +68,7 @@ ENV RUN_ENV=${RUN_ENV} \
     PIP_NO_CACHE_DIR=off \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_DEFAULT_TIMEOUT=100 \
-    POETRY_VERSION=1.7.1 \
+    POETRY_VERSION=${POETRY_VERSION} \
     LO_CONN_PORT=${CODE_PORT}
     # ENV=$CONFIG_DIR/.bashrc
     # PATH="$CONFIG_DIR/.cargo/bin:$PATH"
@@ -76,10 +77,16 @@ ENV RUN_ENV=${RUN_ENV} \
 RUN if [ x"$LOCAL_GIT_AUTHOR_NAME" != "x" ]; then git config --global user.name "$LOCAL_GIT_AUTHOR_NAME" || true; fi \
     && if [ x"$LOCAL_GIT_AUTHOR_EMAIL" != "x" ]; then git config --global user.email $LOCAL_GIT_AUTHOR_EMAIL || true; fi
 
+# remove /usr/lib/python3.11 EXTERNALLY-MANAGED file to allow pip to work
+# https://www.makeuseof.com/fix-pip-error-externally-managed-environment-linux/
+RUN MY_PY_VER=$(python -c "import sys; major, minor = sys.version_info[:2]; print(f'{major}.{minor}');" ) \
+    && if [ -f "/usr/lib/python$MY_PY_VER/EXTERNALLY-MANAGED" ]; then \
+    rm "/usr/lib/python$MY_PY_VER/EXTERNALLY-MANAGED"; fi
+
 # install poetry
 RUN  /usr/bin/pip install "poetry==$POETRY_VERSION" \
     && if [ -f "$CONFIG_DIR/.tmp/res/req/requirements.txt" ]; then \
-    /usr/bin/pip install --no-cache-dir -r "$CONFIG_DIR/.tmp/res/req/requirements.txt"; fi
+    /usr/bin/pip install -r "$CONFIG_DIR/.tmp/res/req/requirements.txt"; fi
 
 WORKDIR /workspace/libreoffice_python_app
 COPY ./pyproject.toml ./poetry.lock ./

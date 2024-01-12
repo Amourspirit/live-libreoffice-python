@@ -1,6 +1,7 @@
 ARG LO_VERSION
 FROM linuxserver/libreoffice:${LO_VERSION}
 
+ARG POETRY_VERSION
 ARG CODE_PORT=2002
 ARG CONFIG_DIR=/config
 
@@ -15,7 +16,6 @@ RUN apk update \
     python3-dev \
     git \
     py-pip \
-    # pipx \
     github-cli \
     subversion \
     make \
@@ -68,7 +68,7 @@ ENV RUN_ENV=${RUN_ENV} \
     PIP_NO_CACHE_DIR=off \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_DEFAULT_TIMEOUT=100 \
-    POETRY_VERSION=1.7.1 \
+    POETRY_VERSION=${POETRY_VERSION} \
     LO_CONN_PORT=${CODE_PORT}
     # ENV=$CONFIG_DIR/.bashrc
     # PATH="$CONFIG_DIR/.cargo/bin:$PATH"

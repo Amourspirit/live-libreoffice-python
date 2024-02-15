@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "libreoffice python template"
-version = "0.1.0"
+version = "0.2.0"
 description = "Template for creating python projects for LibreOffice"
 authors = ["My Name <myemail@address.com>"]
 license = "MIT"
@@ -12,7 +12,7 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.8"
 ooouno = "^2.1.2"
-ooo-dev-tools = ">=0.20.2"
+ooo-dev-tools = ">=0.28.1"
 
 
 [tool.poetry.group.dev.dependencies]

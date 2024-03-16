@@ -1,19 +1,19 @@
+import importlib
 import debugpy
 
 debugpy.listen(8550)
 debugpy.wait_for_client()  # blocks execution until client is attached
 print("Debug Proceeding ...")
 
-import importlib
-from macro import ooodev_ex
+from macro import ooodev_ex as my_macro
 
 
 def mod():
-    return ooodev_ex
+    return my_macro
 
 
 def rl():
-    importlib.reload(ooodev_ex)
+    importlib.reload(my_macro)
 
 
 # make sure this is not run as macro in LibreOffice
